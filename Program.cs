@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using StarCitizen.LocalTelemetry;
 using Forms = System.Windows.Forms;
@@ -21,17 +22,27 @@ static class Program
     [STAThread]
     public static int Main(string[] args)
     {
+        using var wake = new EventWaitHandle(false, EventResetMode.AutoReset, @"Local\StarCitizenOverlay.OpenSettings");
         using var singleton = new Mutex(true, @"Local\StarCitizenOverlay", out bool first);
         if (!first)
         {
-            MessageBox.Show("Star Citizen Overlay is already running. Open it from the system tray.", "Star Citizen Overlay");
-            return 1;
+            wake.Set();
+            return 0;
         }
         var app = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
         var window = new Controller(args.Contains("--demo"), args.Contains("--explorer"), args.Contains("--hotkeys"), args.Contains("--voice"));
         app.MainWindow = window;
-        window.Show();
-        return app.Run();
+        var registration = ThreadPool.RegisterWaitForSingleObject(wake, (_, _) =>
+        {
+            if (!window.Dispatcher.HasShutdownStarted)
+                _ = window.Dispatcher.BeginInvoke(window.OpenSettings);
+        }, null, Timeout.Infinite, false);
+        try
+        {
+            window.Show();
+            return app.Run();
+        }
+        finally { registration.Unregister(null); }
     }
 }
 
@@ -46,6 +57,7 @@ sealed class Controller : Window
     private readonly DispatcherTimer timer;
     private readonly List<(Widget Widget, HudWindow Window)> hud = [];
     private readonly Forms.NotifyIcon tray;
+    private readonly System.Drawing.Icon trayIcon;
     private readonly ListBox widgets = new() { MinHeight = 155 };
     private readonly ComboBox field = new() { IsEditable = true, IsTextSearchEnabled = true };
     private readonly ComboBox display = new() { ItemsSource = Enum.GetValues<Display>() };
@@ -89,6 +101,11 @@ sealed class Controller : Window
         catch (Exception ex) { layout = new(); loadError = "Couldn’t load saved layout. " + ex.Message; }
 
         Title = "Star Citizen Overlay";
+        var icon = new Uri("pack://application:,,,/Assets/StarCitizenTelemetryHud.ico");
+        Icon = BitmapFrame.Create(icon);
+        using (var stream = Application.GetResourceStream(icon).Stream)
+        using (var resource = new System.Drawing.Icon(stream))
+            trayIcon = (System.Drawing.Icon)resource.Clone();
         Width = 1080;
         Height = 744;
         MinWidth = 920;
@@ -234,7 +251,7 @@ sealed class Controller : Window
 
         tray = new Forms.NotifyIcon
         {
-            Icon = System.Drawing.SystemIcons.Application,
+            Icon = trayIcon,
             Text = "Star Citizen Overlay",
             Visible = true,
             ContextMenuStrip = new Forms.ContextMenuStrip()
@@ -858,7 +875,7 @@ sealed class Controller : Window
         return IntPtr.Zero;
     }
 
-    private void OpenSettings()
+    internal void OpenSettings()
     {
         RefreshFields();
         Show();
@@ -937,6 +954,7 @@ sealed class Controller : Window
         tray.Visible = false;
         tray.ContextMenuStrip?.Dispose();
         tray.Dispose();
+        trayIcon.Dispose();
         Application.Current.Shutdown();
     }
 

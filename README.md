@@ -4,6 +4,10 @@ Custom Windows HUD widgets for Star Citizen, powered by [ROBdk97.ScLocalTelemetr
 
 ![Configurator showing grouped widgets and a shield indicator](docs/screenshots/configurator.png)
 
+## Install
+
+Run `powershell -NoProfile -File .\Install.ps1` from the source folder or beside the published executable. Then search Windows Start for **Star Citizen Telemetry HUD**. Installation is per user.
+
 ## Run
 
 Use the .NET 11 SDK to build both Windows targets. The .NET 10 SDK can build the .NET 10 target with `-p:TargetFrameworks=net10.0-windows`.

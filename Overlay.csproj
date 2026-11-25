@@ -6,8 +6,11 @@
     <UseWindowsForms>true</UseWindowsForms>
     <Nullable>enable</Nullable>
     <AssemblyName>StarCitizenOverlay</AssemblyName>
+    <ApplicationIcon>Assets/StarCitizenTelemetryHud.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Resource Include="Assets/StarCitizenTelemetryHud.ico" />
+    <None Update="Install.ps1" CopyToPublishDirectory="PreserveNewest" />
     <PackageReference Include="ROBdk97.ScLocalTelemetry" Version="0.2.0-preview.1" />
     <PackageReference Include="NAudio.WinMM" Version="3.3.0" />
     <PackageReference Include="System.Speech" Version="10.0.0" />
