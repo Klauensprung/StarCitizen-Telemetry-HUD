@@ -4,9 +4,11 @@ Custom Windows HUD widgets for Star Citizen, powered by [ROBdk97.ScLocalTelemetr
 
 ![Configurator showing grouped widgets and a shield indicator](docs/screenshots/configurator.png)
 
-## Install
+## Start menu
 
-Run `powershell -NoProfile -File .\Install.ps1` from the source folder or beside the published executable. Then search Windows Start for **Star Citizen Telemetry HUD**. Installation is per user.
+Open the published executable once. After that, press the Windows key and search for **Star Citizen Telemetry HUD**. The app creates a shortcut for your Windows account on first launch.
+
+`Install.ps1` is optional if you want to copy the app to a stable per-user install folder.
 
 ## Run
 

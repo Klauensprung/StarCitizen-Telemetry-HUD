@@ -29,6 +29,7 @@ static class Program
             wake.Set();
             return 0;
         }
+        StartMenuShortcut.EnsureForCurrentUser();
         var app = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
         var window = new Controller(args.Contains("--demo"), args.Contains("--explorer"), args.Contains("--hotkeys"), args.Contains("--voice"));
         app.MainWindow = window;
