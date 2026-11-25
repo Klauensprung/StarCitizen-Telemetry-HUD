@@ -399,3 +399,19 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# HUD settings and local artifacts
+bin/
+obj/
+TestResults/
+.env
+.env.*
+*.dmp
+layout.json
+demo-layout.json
+hotkeys.json
+demo-hotkeys.json
+voice.json
+demo-voice.json
+observed-states.json
+demo-observed-states.json
