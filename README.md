@@ -43,3 +43,7 @@ Create groups with **Overlay group** and expand or collapse them with their arro
 Open **Hotkeys → Voice commands** or use the tray menu. Pick a **Push-to-talk key** (default **F8**), optionally with **Shift** or **Alt**, and apply the settings. Hold that key while saying a phrase such as **hide overlay**, then release it. A sound confirms whether a phrase matched. Select your microphone, use **Test microphone** to check its level and recognition, then apply the settings. Edit phrase bindings in the same menu.
 
 Windows Speech uses an installed Windows recognizer. The optional **Voicebox** backend uses a running local server at `http://127.0.0.1:17493`. Game commands use the same action support and foreground checks as hotkeys. Audio is captured only while the shortcut is held and is kept in memory.
+
+## Acknowledgments
+
+Thanks to ROBdk97 for publishing and maintaining [ROBdk97.ScLocalTelemetry](https://www.nuget.org/packages/ROBdk97.ScLocalTelemetry), the library that powers the HUD's Star Citizen telemetry.
